@@ -38,10 +38,16 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 
 Решение 2
 
-```
+В запросе происходит излишняя обработка таблиц inventory, rental и film, не связанных с подсчитыванием суммы платежей покупателей за конкретную дату. Все необходимые данные есть в таблицах payment и customer, соответственно, остальные таблицы можно исключить. 
+Возможно оптимизировать запрос:
 
 ```
-![alt text]()
+select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
+from payment p, customer c
+where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id 
+```
+![alt text](https://github.com/ahmrust/indexes/blob/main/img/2.png)
+![alt text](https://github.com/ahmrust/indexes/blob/main/img/3.png)
 
 ### Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
@@ -52,7 +58,3 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 
 Решение 3
 
-```
-
-```
-![alt text]()
