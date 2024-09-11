@@ -13,14 +13,21 @@
 Желаем успехов в выполнении домашнего задания.
 
 ### Задание 1
+
 Напишите запрос к учебной базе данных, который вернёт процентное отношение общего размера всех индексов к общему размеру всех таблиц.
 
 Решение 1
-```
 
 ```
+SELECT table_schema as DB_name,
+CONCAT(ROUND((SUM(index_length))*100/(SUM(data_length+index_length)),2),'%') '% of index'
+FROM information_schema.TABLES where TABLE_SCHEMA = 'sakila'
+
+```
+![alt text](https://github.com/ahmrust/indexes/blob/main/img/1.png)
 
 ### Задание 2
+
 Выполните explain analyze следующего запроса:
 
 select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id, f.title)
@@ -30,16 +37,17 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 оптимизируйте запрос: внесите корректировки по использованию операторов, при необходимости добавьте индексы.
 
 Решение 2
-```
 
 ```
 
-Дополнительные задания (со звёздочкой*)
+```
+![alt text]()
+
+### Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
 
 ### Задание 3*
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
-
 Приведите ответ в свободной форме.
 
 Решение 3
@@ -47,4 +55,4 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 ```
 
 ```
-
+![alt text]()
