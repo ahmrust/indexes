@@ -42,12 +42,19 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 Возможно оптимизировать запрос:
 
 ```
-select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
-from payment p, customer c
-where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id 
+explain analyze
+SELECT DISTINCT 
+       CONCAT(c.last_name, ' ', c.first_name) AS full_name, SUM(p.amount) OVER (PARTITION BY c.customer_id, f.title)
+FROM payment p
+JOIN rental r ON p.payment_date = r.rental_date
+JOIN customer c ON r.customer_id = c.customer_id
+JOIN inventory i ON r.inventory_id = i.inventory_id
+JOIN film f ON i.film_id = f.film_id
+WHERE payment_date >= '2005-07-30' and payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY) 
 ```
 ![alt text](https://github.com/ahmrust/indexes/blob/main/img/2.png)
 ![alt text](https://github.com/ahmrust/indexes/blob/main/img/3.png)
+![alt text](https://github.com/ahmrust/indexes/blob/main/img/4.png)
 
 ### Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
